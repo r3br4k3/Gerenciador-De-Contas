@@ -108,8 +108,31 @@ h1 {
 
 .wallet-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.wallet-row select {
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn-wpp {
+  background: linear-gradient(120deg, #22c55e, #16a34a);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.btn-wpp:hover {
+  opacity: 0.9;
+}
+
+.btn-delete-wallet {
+  white-space: nowrap;
 }
 
 .summary-grid {
@@ -289,6 +312,41 @@ button:active {
   font-size: 0.9rem;
 }
 
+.photo-upload-field {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px dashed #2e4557;
+  background: linear-gradient(140deg, rgba(29, 211, 176, 0.07), rgba(255, 142, 114, 0.04));
+}
+
+.photo-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #2d3f4f;
+  background: rgba(12, 17, 23, 0.75);
+}
+
+.photo-input::file-selector-button {
+  margin-right: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  color: #06231f;
+  font-weight: 700;
+  background: linear-gradient(120deg, var(--accent), #70f5dd);
+  cursor: pointer;
+}
+
+.photo-input:hover::file-selector-button {
+  opacity: 0.92;
+}
+
+.photo-hint {
+  color: #8fa5bb;
+  font-size: 0.8rem;
+}
+
 .form-actions {
   display: flex;
   justify-content: end;
@@ -335,4 +393,201 @@ button:active {
   .debt-right {
     justify-items: start;
   }
+}
+
+/* ─── Toasts ──────────────────────────────────────────────────────────────── */
+
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #161f2a;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+  color: var(--text-main);
+  font-size: 0.92rem;
+  max-width: 340px;
+  pointer-events: all;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(14px) scale(0.96);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.toast-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.toast-success { border-color: #1dd3b066; background: linear-gradient(135deg, #0d2320, #161f2a); }
+.toast-error   { border-color: #f05d5e66; background: linear-gradient(135deg, #2a0d0d, #161f2a); }
+.toast-warning { border-color: #fbbf2466; background: linear-gradient(135deg, #2a200d, #161f2a); }
+.toast-info    { border-color: #60a5fa66; background: linear-gradient(135deg, #0d1a2a, #161f2a); }
+
+.toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.toast-text { flex: 1; line-height: 1.4; }
+
+/* ─── Confirm dialog ──────────────────────────────────────────────────────── */
+
+.confirm-modal {
+  width: min(420px, 92vw);
+}
+
+.confirm-box {
+  background: linear-gradient(145deg, #141e28, #111820);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px 22px 18px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
+  display: grid;
+  gap: 18px;
+}
+
+.confirm-msg {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--text-main);
+}
+
+/* ─── Log de atividades ───────────────────────────────────────────────────── */
+
+.log-section {
+  width: min(1100px, 96vw);
+  margin: 18px auto 48px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(255,255,255,0.006));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.log-toggle {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  cursor: pointer;
+  gap: 8px;
+}
+
+.log-toggle:hover {
+  color: var(--text-main);
+  background: rgba(255,255,255,0.03);
+  transform: none;
+}
+
+.log-chevron {
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+.log-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.log-body--open {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.log-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 18px 10px;
+  border-top: 1px solid var(--line);
+}
+
+.log-count {
+  color: var(--text-soft);
+  font-size: 0.82rem;
+}
+
+.log-clear {
+  background: transparent;
+  border: 1px solid #3a2a2a;
+  color: #ffc9ca;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+}
+
+.log-clear:hover {
+  background: rgba(240, 93, 94, 0.12);
+}
+
+.log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 12px;
+}
+
+.log-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.875rem;
+  transition: background 0.15s ease;
+}
+
+.log-item:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+.log-item:last-child {
+  border-bottom: none;
+}
+
+.log-emoji {
+  font-size: 1rem;
+  width: 22px;
+  text-align: center;
+}
+
+.log-msg {
+  color: var(--text-main);
+}
+
+.log-time {
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.log-type-error .log-msg  { color: #ffc9ca; }
+.log-type-delete .log-msg { color: #ffd4c2; }
+.log-type-payment .log-msg{ color: #c2fae8; }
+.log-type-add .log-msg    { color: #d4f5ee; }
+.log-type-wallet .log-msg { color: #d4e8ff; }
+.log-type-share .log-msg  { color: #d4ffe8; }
+
+.log-empty {
+  padding: 14px 18px;
+  color: var(--text-soft);
+  font-size: 0.88rem;
 }

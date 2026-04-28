@@ -157,6 +157,41 @@ app.put('/api/wallets/:id', async (req, res) => {
   }
 });
 
+app.delete('/api/wallets/:id', async (req, res) => {
+  try {
+    const db = await readDb();
+    const index = db.wallets.findIndex((item) => item.id === req.params.id);
+
+    if (index === -1) {
+      return res.status(404).json({ error: 'Carteira nao encontrada.' });
+    }
+
+    if (db.wallets.length === 1) {
+      return res.status(400).json({ error: 'Nao e possivel excluir a ultima carteira.' });
+    }
+
+    // Remove a carteira e todas as dividas vinculadas a ela
+    const debtFilesToRemove = db.debts
+      .filter((d) => d.walletId === req.params.id)
+      .map((d) => d.iconUrl)
+      .filter(Boolean);
+
+    db.debts = db.debts.filter((d) => d.walletId !== req.params.id);
+    db.wallets.splice(index, 1);
+    await writeDb(db);
+
+    // Remove arquivos de upload orfaos em background
+    debtFilesToRemove.forEach((url) => {
+      const filename = url.replace('/uploads/', '');
+      fs.unlink(path.join(uploadsDir, filename)).catch(() => {});
+    });
+
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: 'Falha ao excluir carteira.' });
+  }
+});
+
 app.get('/api/debts', async (req, res) => {
   try {
     const db = await readDb();
@@ -164,7 +199,7 @@ app.get('/api/debts', async (req, res) => {
     const filtered = walletId ? db.debts.filter((debt) => debt.walletId === walletId) : db.debts;
     const result = filtered
       .map(enrichDebt)
-      .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+      .sort((a, b) => new Date(b.updatedAt || b.createdAt || 0).getTime() - new Date(a.updatedAt || a.createdAt || 0).getTime());
 
     res.json(result);
   } catch (error) {
@@ -190,13 +225,12 @@ app.post('/api/debts', upload.single('icon'), async (req, res) => {
     const walletId = String(req.body?.walletId || '').trim();
     const totalAmount = toNumber(req.body?.totalAmount, NaN);
     const totalInstallments = Math.floor(toNumber(req.body?.totalInstallments, NaN));
-    const dueDate = String(req.body?.dueDate || '').trim();
 
-    if (!description || !walletId || !dueDate || !Number.isFinite(totalAmount) || totalAmount <= 0 || !Number.isFinite(totalInstallments) || totalInstallments <= 0) {
+    if (!description || !walletId || !Number.isFinite(totalAmount) || totalAmount <= 0 || !Number.isFinite(totalInstallments) || totalInstallments <= 0) {
       if (req.file?.filename) {
         await fs.unlink(path.join(uploadsDir, req.file.filename)).catch(() => {});
       }
-      return res.status(400).json({ error: 'Preencha descricao, valor, parcelas e vencimento corretamente.' });
+      return res.status(400).json({ error: 'Preencha descricao, valor e parcelas corretamente.' });
     }
 
     const walletExists = db.wallets.some((wallet) => wallet.id === walletId);
@@ -214,7 +248,6 @@ app.post('/api/debts', upload.single('icon'), async (req, res) => {
       totalAmount: roundCurrency(totalAmount),
       totalInstallments,
       paidInstallments: Math.max(0, Math.min(totalInstallments, Math.floor(toNumber(req.body?.paidInstallments, 0)))),
-      dueDate,
       iconUrl: req.file?.filename ? `/uploads/${req.file.filename}` : '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -244,9 +277,8 @@ app.put('/api/debts/:id', upload.single('icon'), async (req, res) => {
     const walletId = String(req.body?.walletId || debt.walletId).trim();
     const totalAmount = toNumber(req.body?.totalAmount, debt.totalAmount);
     const totalInstallments = Math.floor(toNumber(req.body?.totalInstallments, debt.totalInstallments));
-    const dueDate = String(req.body?.dueDate || debt.dueDate).trim();
 
-    if (!description || !walletId || !dueDate || !Number.isFinite(totalAmount) || totalAmount <= 0 || !Number.isFinite(totalInstallments) || totalInstallments <= 0) {
+    if (!description || !walletId || !Number.isFinite(totalAmount) || totalAmount <= 0 || !Number.isFinite(totalInstallments) || totalInstallments <= 0) {
       if (req.file?.filename) {
         await fs.unlink(path.join(uploadsDir, req.file.filename)).catch(() => {});
       }
@@ -271,7 +303,6 @@ app.put('/api/debts/:id', upload.single('icon'), async (req, res) => {
     debt.totalAmount = roundCurrency(totalAmount);
     debt.totalInstallments = totalInstallments;
     debt.paidInstallments = Math.max(0, Math.min(totalInstallments, Math.floor(toNumber(req.body?.paidInstallments, debt.paidInstallments))));
-    debt.dueDate = dueDate;
     debt.iconUrl = req.file?.filename ? `/uploads/${req.file.filename}` : debt.iconUrl;
     debt.updatedAt = new Date().toISOString();
 

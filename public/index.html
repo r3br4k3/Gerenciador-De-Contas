@@ -26,6 +26,8 @@
         <div class="wallet-row">
           <select id="walletSelect"></select>
           <button id="newWalletButton" type="button">Nova carteira</button>
+          <button id="shareWalletButton" class="btn-wpp" type="button" title="Compartilhar no WhatsApp">📤 WhatsApp</button>
+          <button id="deleteWalletButton" class="btn-delete-wallet danger" type="button" title="Excluir carteira">🗑️ Excluir carteira</button>
         </div>
       </section>
 
@@ -92,14 +94,10 @@
           <input id="debtInstallments" name="totalInstallments" type="number" required min="1" step="1" />
         </label>
 
-        <label>
-          Vencimento
-          <input id="debtDueDate" name="dueDate" type="date" required />
-        </label>
-
-        <label>
+        <label class="photo-upload-field">
           Foto para icone
-          <input id="debtIcon" name="icon" type="file" accept="image/*" />
+          <input id="debtIcon" class="photo-input" name="icon" type="file" accept="image/*" />
+          <span class="photo-hint">Selecione uma imagem para representar esta divida.</span>
         </label>
 
         <div class="form-actions">
@@ -134,6 +132,35 @@
         </div>
       </article>
     </template>
+
+    <!-- Toast container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <!-- Confirm dialog temático -->
+    <dialog id="confirmDialog" class="modal confirm-modal">
+      <div class="confirm-box">
+        <p id="confirmMessage" class="confirm-msg"></p>
+        <div class="form-actions">
+          <button id="confirmCancel" type="button">Cancelar</button>
+          <button id="confirmOk" type="button" class="primary confirm-ok">Confirmar</button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Log de atividades -->
+    <section class="log-section" id="logSection">
+      <button class="log-toggle" id="logToggle" type="button">
+        <span>📋 Log de atividades</span>
+        <span id="logChevron" class="log-chevron">▲</span>
+      </button>
+      <div class="log-body" id="logBody">
+        <div class="log-header-row">
+          <span id="logCount" class="log-count"></span>
+          <button id="logClear" type="button" class="log-clear">🗑️ Limpar log</button>
+        </div>
+        <ul id="logList" class="log-list"></ul>
+      </div>
+    </section>
 
     <script src="/app.js" defer></script>
   </body>
