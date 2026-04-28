@@ -36,7 +36,8 @@ const dom = {
   logBody: document.querySelector('#logBody'),
   logList: document.querySelector('#logList'),
   logCount: document.querySelector('#logCount'),
-  logClear: document.querySelector('#logClear')
+  logClear: document.querySelector('#logClear'),
+  installButton: document.querySelector('#installButton')
 };
 
 const brl = new Intl.NumberFormat('pt-BR', {
@@ -489,6 +490,39 @@ function setupEvents() {
   document.querySelector('[data-close-wallet]').addEventListener('click', () => dom.walletDialog.close());
 }
 
+// ─── PWA Install ─────────────────────────────────────────────────────────────
+
+function setupInstall() {
+  let deferredPrompt = null;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    dom.installButton.hidden = false;
+    dom.installButton.classList.add('btn-install--visible');
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    dom.installButton.hidden = true;
+    toast('Aplicativo instalado com sucesso!', 'success');
+    logAdd('wallet', 'Aplicativo instalado no dispositivo.');
+  });
+
+  dom.installButton.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      toast('Instalando aplicativo…', 'info');
+    } else {
+      toast('Instalacao cancelada.', 'warning');
+    }
+    deferredPrompt = null;
+    dom.installButton.hidden = true;
+  });
+}
+
 function setupLog() {
   let logOpen = false;
 
@@ -505,6 +539,7 @@ function setupLog() {
 async function start() {
   setupEvents();
   setupLog();
+  setupInstall();
 
   try {
     await loadWallets();

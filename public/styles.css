@@ -65,6 +65,41 @@ body {
   animation: slide-up 0.6s ease;
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-install {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(29, 211, 176, 0.4);
+  background: linear-gradient(135deg, rgba(29, 211, 176, 0.12), rgba(29, 211, 176, 0.05));
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  animation: pulse-install 2.5s ease-in-out infinite;
+}
+
+.btn-install--visible {
+  display: flex;
+}
+
+.btn-install:hover {
+  background: linear-gradient(135deg, rgba(29, 211, 176, 0.25), rgba(29, 211, 176, 0.1));
+  border-color: var(--accent);
+}
+
+@keyframes pulse-install {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(29, 211, 176, 0); }
+  50%       { box-shadow: 0 0 0 6px rgba(29, 211, 176, 0.18); }
+}
+
 .eyebrow {
   color: var(--accent);
   text-transform: uppercase;
