@@ -1,0 +1,22 @@
+{
+  "name": "Gerenciador de Dividas",
+  "short_name": "Dividas",
+  "description": "Controle de dividas por carteiras com resumo mensal e parcelas.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c1117",
+  "theme_color": "#11181f",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
