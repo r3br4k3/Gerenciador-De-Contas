@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@700;800&display=swap');
 
 :root {
   --bg-main: #0c1117;
@@ -100,23 +100,11 @@ body {
   50%       { box-shadow: 0 0 0 6px rgba(29, 211, 176, 0.18); }
 }
 
-.eyebrow {
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0;
-  font-size: 0.75rem;
-}
-
 h1,
 h2,
 h3 {
   margin: 0;
   font-family: 'Sora', sans-serif;
-}
-
-h1 {
-  font-size: clamp(1.5rem, 4vw, 2.3rem);
 }
 
 .wallet-panel,
@@ -625,4 +613,84 @@ button:active {
   padding: 14px 18px;
   color: var(--text-soft);
   font-size: 0.88rem;
+}
+
+/* ─── Canvas de estrelas ─────────────────────────────────────────────────── */
+
+.stars-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* ─── Brand / Título espacial ────────────────────────────────────────────── */
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.brand-icon {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 0 14px rgba(130, 100, 255, 0.9));
+  animation: float-icon 3.8s ease-in-out infinite;
+}
+
+.brand-text {
+  font-family: 'Space Grotesk', 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  background: linear-gradient(
+    100deg,
+    #a78bfa 0%,
+    #60a5fa 28%,
+    #1dd3b0 55%,
+    #f9a8d4 80%,
+    #a78bfa 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: galaxy-shift 6s linear infinite;
+  text-shadow: none;
+}
+
+.brand-br { display: none; }
+
+@media (max-width: 420px) {
+  .brand-br { display: block; }
+  .brand-text { font-size: 1.45rem; }
+  .brand-icon { font-size: 1.8rem; }
+}
+
+@keyframes galaxy-shift {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes float-icon {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50%       { transform: translateY(-6px) rotate(4deg); }
 }

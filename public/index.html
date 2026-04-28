@@ -3,20 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#11181f" />
+    <meta name="theme-color" content="#060b14" />
     <title>Gerenciador de Dividas</title>
     <link rel="manifest" href="/manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
+    <canvas id="starsCanvas" class="stars-canvas"></canvas>
     <div class="bg-orb orb-left"></div>
     <div class="bg-orb orb-right"></div>
 
     <main class="app-shell">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">Controle financeiro</p>
-          <h1>Gerenciador de Dividas</h1>
+        <div class="brand">
+          <p class="eyebrow">🚀 controle financeiro</p>
+          <h1 class="brand-title">
+            <span class="brand-icon">🌌</span>
+            <span class="brand-text">Gerenciador<br class="brand-br" /> de Dívidas</span>
+          </h1>
         </div>
         <div class="topbar-actions">
           <button id="installButton" class="btn-install" type="button" hidden title="Instalar aplicativo">
