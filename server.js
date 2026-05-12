@@ -333,7 +333,6 @@ app.patch('/api/debts/:id/installments', async (req, res) => {
       return res.status(400).json({ error: 'Acao invalida. Use inc ou dec.' });
     }
 
-    debt.updatedAt = new Date().toISOString();
     await writeDb(db);
     return res.json(enrichDebt(debt));
   } catch (error) {
